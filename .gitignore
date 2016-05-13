@@ -1,3 +1,5 @@
 *.swp
 artifacts/*
 !artifacts/.gitkeep
+bin/*
+!bin/.gitkeep
