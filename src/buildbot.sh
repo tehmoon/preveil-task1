@@ -39,7 +39,7 @@ checkout() {
 
 	cd ${GIT_TMP}
 
-	git checkout -b dev
+	git checkout -b dev origin/dev
 }
 
 checkout_and_start() {
