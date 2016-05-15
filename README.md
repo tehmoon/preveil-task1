@@ -1,13 +1,16 @@
 # preveil-task1
 
-### features: 
+### features:
 
-- [ ] watch for a specific git repository
-- [ ] watch for a specific branch in that repository
-- [ ] checkout the repository in a tmp directory whenever a change occurs
-- [ ] extract the url from the git repository
-- [ ] find if there is a directory that matches the git url path in targets/
-- [ ] execute every scripts in that directory in alphabetical order
+- [x] watch for a specific git repository
+- [x] watch for a specific branch in that repository
+- [x] checkout the repository in a tmp directory whenever a change occurs
+- [x] extract the url from the git repository
+- [x] find if there is a directory that matches the git url path in targets/
+- [x] execute every scripts in that directory in alphabetical order
+- [x] each lines displayed by each scripts executed get copied in their own directory corresponding to a commit
+-	[x]	create a file that points to the current commit that way scripts can cat that file and rsync the entire directory
+- [ ] starts web server that serve artifact directory
 - [ ] ...
 
 
