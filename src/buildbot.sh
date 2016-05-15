@@ -6,6 +6,11 @@ GIT_BRANCH=dev
 TMP_DIR=tmp
 TARGET_DIR=targets
 ART_DIR=artifacts
+WEB_SERVER_PORT=8000
+RUN_DIR=run
+
+
+PID_FILE=${RUN_DIR}/ws.pid
 
 usage() {
 	MSG=${1}
@@ -20,6 +25,9 @@ usage() {
 [ "x${GIT_URL}" = "x" ] && usage
 
 clean() {
+
+	kill `cat ${PID_FILE}` 2>&1 > /dev/null || true
+
 	echo -n "Cleaning tmp dir... "
 
 	[ "x${TMP_DIR}" = "x" ] && echo -e "NOK" > /dev/stderr && exit 2
@@ -47,7 +55,18 @@ write_current_commit() {
 	echo ${CURRENT_COMMIT} > ${ART_DIR}/${GIT_PATH}/${GIT_BRANCH}
 }
 
-start() {
+start_web_server() {
+	cd ${ART_DIR}
+
+	python -m SimpleHTTPServer ${WEB_SERVER_PORT} &
+
+	cd - 2>&1 > /dev/null
+
+	echo $! > ${PID_FILE}
+
+}
+
+start_git_watch() {
 	CURRENT_COMMIT=$(get_cur_commit)
 
 	while true
@@ -120,7 +139,8 @@ checkout_and_start() {
 	TASK_DIR=${TARGET_DIR}/${GIT_PATH}
 
 	create_artifact_dir
-	start
+	start_web_server
+	start_git_watch
 }
 
 check_path() {

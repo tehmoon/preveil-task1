@@ -10,7 +10,7 @@
 - [x] execute every scripts in that directory in alphabetical order
 - [x] each lines displayed by each scripts executed get copied in their own directory corresponding to a commit
 -	[x]	create a file that points to the current commit that way scripts can cat that file and rsync the entire directory
-- [ ] starts web server that serve artifact directory
+- [x] starts web server that serve artifact directory
 - [ ] ...
 
 
