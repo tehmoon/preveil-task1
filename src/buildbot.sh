@@ -4,7 +4,7 @@ set -e
 GIT_URL=${1}
 GIT_BRANCH=dev
 TMP_DIR=tmp
-TARGET_PATH=targets
+TARGET_DIR=targets
 
 usage() {
 	MSG=${1}
@@ -26,15 +26,19 @@ clean() {
 	echo "OK."
 }
 
+exec_task() {
+	[ -d ${TASK_DIR} ]
+}
+
 start() {
 	CURRENT_COMMIT=$(get_cur_commit)
 
 	while true
 	do
 		echo ${CURRENT_COMMIT}
-		echo ${TASK_PATH}
+		echo ${TASK_DIR}
 
-		git_refresh && CURRENT_COMMIT=$(get_cur_commit)
+		git_refresh && [ ! $(get_cur_commit) = ${CURRENT_COMMIT} ] && echo "Commit changed!" && CURRENT_COMMIT=$(get_cur_commit) && (exec_task || true)
 
 	  sleep  1
 	done
@@ -46,7 +50,7 @@ git_refresh() {
 	git pull origin dev
 	RET=$?
 
-	cd -
+	cd - 2>&1 > /dev/null
 
   return ${RET}
 }
@@ -56,7 +60,7 @@ get_cur_commit() {
 
 	git log --pretty=format:%H -1
 
-	cd -
+	cd - 2>&1 > /dev/null
 }
 
 checkout() {
@@ -66,7 +70,7 @@ checkout() {
 
 	git checkout -b ${GIT_BRANCH} origin/${GIT_BRANCH}
 
-	cd -
+	cd - 2>&1 > /dev/null
 }
 
 get_git_path() {
@@ -77,7 +81,7 @@ get_git_path() {
 	echo ${REMOTE} | grep '://' 2>&1 > /dev/null && echo ${REMOTE} | cut -d '/' -f 3- || ( \ # handling pattern like scheme://uri
 	echo ${REMOTE} | grep '@' 2>&1 > /dev/null && echo ${REMOTE} | cut -d '@' -f 2- | sed 's/:/\//' | sed -e 's/\.git$//' ) # handling pattern like username@host:git_url
 
-	cd -
+	cd - 2>&1 > /dev/null
 }
 
 checkout_and_start() {
@@ -86,7 +90,7 @@ checkout_and_start() {
 	checkout
 
 	GIT_PATH=$(get_git_path)
-	TASK_PATH=${TARGET_DIR}/${GIT_PATH}
+	TASK_DIR=${TARGET_DIR}/${GIT_PATH}
 
 	start
 }
