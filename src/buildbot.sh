@@ -8,6 +8,7 @@ TARGET_DIR=targets
 ART_DIR=artifacts
 WEB_SERVER_PORT=8000
 RUN_DIR=run
+LOOP_TIMER=1
 
 
 PID_FILE=${RUN_DIR}/ws.pid
@@ -82,7 +83,7 @@ start_git_watch() {
 			write_current_commit &&
 			(exec_task || true)
 
-	  sleep  1
+	  sleep ${LOOP_TIMER}
 	done
 }
 
