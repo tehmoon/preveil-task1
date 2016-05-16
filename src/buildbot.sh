@@ -119,7 +119,7 @@ checkout() {
 get_git_path() {
 	cd ${GIT_TMP}
 
-	REMOTE=$(git remote get-url --push origin)
+	REMOTE=$(git remote -v | head -n 1 | awk '{print $2}')
 
 	echo ${REMOTE} | grep '://' 2>&1 > /dev/null && echo ${REMOTE} | cut -d '/' -f 3- || ( \ # handling pattern like scheme://uri
 	echo ${REMOTE} | grep '@' 2>&1 > /dev/null && echo ${REMOTE} | cut -d '@' -f 2- | sed 's/:/\//' | sed -e 's/\.git$//' ) # handling pattern like username@host:git_url
